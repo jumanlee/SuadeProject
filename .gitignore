@@ -1,0 +1,189 @@
+# copied and adapted from my other github repo: https://github.com/jumanlee/lyncupdjango
+
+# Backup files # 
+*.bak 
+
+# If you are using PyCharm # 
+# User-specific stuff
+/.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# AWS User-specific
+.idea/**/aws.xml
+
+# Generated files
+.idea/**/contentModel.xml
+
+# Sensitive or high-churn files
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# Gradle
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# File-based project format
+*.iws
+
+# IntelliJ
+out/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Python # 
+*.py[cod] 
+*$py.class 
+
+# Distribution / packaging 
+.Python build/ 
+develop-eggs/ 
+dist/ 
+downloads/ 
+eggs/ 
+.eggs/ 
+lib/ 
+lib64/ 
+parts/ 
+sdist/ 
+var/ 
+wheels/ 
+*.egg-info/ 
+.installed.cfg 
+*.egg 
+*.manifest 
+*.spec 
+
+# Installer logs 
+pip-log.txt 
+pip-delete-this-directory.txt 
+
+# Unit test / coverage reports 
+htmlcov/ 
+.tox/ 
+.coverage 
+.coverage.* 
+.cache 
+.pytest_cache/ 
+nosetests.xml 
+coverage.xml 
+*.cover 
+.hypothesis/ 
+
+# Jupyter Notebook 
+.ipynb_checkpoints 
+
+# pyenv 
+.python-version 
+
+# celery 
+celerybeat-schedule.* 
+
+# SageMath parsed files 
+*.sage.py 
+
+# Environments 
+.suadeproject/
+.suadeproject
+.env 
+*.env.*
+.venv 
+env/ 
+venv/ 
+ENV/ 
+env.bak/ 
+venv.bak/
+virtualenv/ 
+
+# mkdocs documentation 
+/site 
+
+# mypy 
+.mypy_cache/ 
+
+# Sublime Text # 
+*.tmlanguage.cache 
+*.tmPreferences.cache 
+*.stTheme.cache 
+*.sublime-workspace 
+*.sublime-project 
+
+# sftp configuration file 
+sftp-config.json 
+
+#package control specific files package 
+Control.last-run 
+Control.ca-list 
+Control.ca-bundle 
+Control.system-ca-bundle 
+GitHub.sublime-settings 
+
+#visual Studio Code # 
+.vscode/* 
+!.vscode/settings.json 
+!.vscode/tasks.json 
+!.vscode/launch.json 
+!.vscode/extensions.json 
+.history
+
+#Redis
+dump.rdb
+
+#ignore csv
+*.csv
+
+#ignore static files only on the project root level. hence using both /
+/staticfiles/
+
+#ignore DS_store, no relevance to the project, only for MacOS system files
+.DS_Store
+
+#python caches and tooling
+__pycache__/
+.ruff_cache/
+.pyright/
+
+#local dev databases
+*.sqlite3
+*.db
+
+#logs
+logs/
+*.log
+
+#env helpers
+.envrc
+
+#local docker override 
+docker-compose.override.yml
+
+# #ignore everything inside /data
+# /data/**
+# #do not ignore the samples folder and its contents          
+# !/data/samples/** 
+
+#don't ignore data inside /data if any, e.g. for testing 
+!/data/**
+
+#ignore any csv file in the root directory, in case its copied accidentally there.
+/*.csv
+
+#explicitly ignore this file
+/dummy_transactions.csv
+
+#explicitly ignore this file anywhere in the project
+dummy_transactions.csv
+
+
+
+
+
