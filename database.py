@@ -3,6 +3,7 @@ from sqlalchemy.orm import DeclarativeBase
 from typing import AsyncIterator
 
 
+
 #plannned workflow:
 #1)AsyncSession asks the engine for a connection.
 #2)the engine hands it one from the pool.
@@ -35,6 +36,10 @@ AsyncSessionLocal = async_sessionmaker(
 
 #runs once at app startup, create tables from models
 async def init_models() -> None:
+
+    #import models so that they are registered with Base.metadata because Base.metadata only knows about models that have been imported into memory
+    import models.models  
+
     #engine begin opens a connection with a transaction
     async with engine.begin() as conn:
         #conn.run_sync enables call sync functions on the async connection

@@ -12,7 +12,8 @@ class UploadData(BaseModel):
 #use ConfigDict(from_attributes=True) so that when building this Pydantic model, allow it to pull values from object attributes instead of only dicts
 #usually for ORM, which uses attributes, but UploadData is Pydantic, so not using attributes, but still defining ConfigDict(from_attributes=True) here even though not ORM, just to ensure consistency
 
-    model_config = ConfigDict(from_attributes=True)
+#add extra="forbid" to reject any unexpected fields during validation
+    model_config = ConfigDict(from_attributes=True, extra="forbid")
     row_count: int
     user_count: int
     product_count: int
@@ -21,7 +22,7 @@ class UploadData(BaseModel):
 
 
 class Summary(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, extra="forbid")
     user_id: int
     start: Optional[datetime] = None
     end: Optional[datetime] = None

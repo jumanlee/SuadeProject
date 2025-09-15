@@ -1,7 +1,8 @@
-from sqlalchemy import String, Integer, Numeric, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
-from .database import Base
+from ..database import Base
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
+from sqlalchemy import Integer, Numeric, DateTime, ForeignKey, Index
+import uuid
 
 class User(Base):
     __tablename__ = "users"
@@ -47,8 +48,10 @@ class Transaction(Base):
         nullable=False,
     )
 
-    timestamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), index=True, nullable=False)
-    transaction_amount: Mapped[Numeric] = mapped_column(Numeric(12, 2), nullable=False)
+    # timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True, nullable=False)
+    #assuming assume timezone for now, since the csv data doesn't provide timezone info. If timezone info is provided in future, can change to timezone=True
+    timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=False), index=True, nullable=False)
+    transaction_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
 
     #on the child table (Transaction), the reference to its parent (user, product) is always a single object, not a list, so no need for list[], it's a scalar ref
     user: Mapped["User"] = relationship(back_populates="transactions")
