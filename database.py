@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
 from typing import AsyncIterator
+import os
 
 
 
@@ -10,7 +11,16 @@ from typing import AsyncIterator
 #3)query runs on that connection
 #4)when the session is closed (end of async with), the connection is returned to the pool for reuse
 
-DATABASE_URL = "postgresql+asyncpg://app:app@localhost:5432/suade"
+# DATABASE_URL = "postgresql+asyncpg://app:app@localhost:5432/suade"
+
+
+#DATABASE_URL from env var, for Docker, set in docker-compose.yml
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    #fallback for local dev, non-Docker
+    "postgresql+asyncpg://app:app@localhost:5432/suade"  
+)
+
 
 #th engine creates a connection pool object. This pool is responsible for opening and holding the actual TCP connections to postgres
 engine = create_async_engine(

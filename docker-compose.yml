@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: suade
+    ports:
+    #optional: expose to host, remove if not needed host access. 
+    #this is so that PostgreSql inside the container is accessible on the host machine at localhost:5432. Useful for local dev and debugging with a GUI tool , e.g. psql, pgAdmin, or DBeave, or want another app outside Docker to reach the database
+      - "5432:5432"   
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d suade -h localhost"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      #use the Docker service name "db" as host:
+      DATABASE_URL: postgresql+asyncpg://app:app@db:5432/suade
+    ports:
+      - "8000:8000"
+
+    #bind mount, uncomment the next two lines for live edit dev:
+    # volumes:
+    #   - .:/app
+
+volumes:
+  db-data:
