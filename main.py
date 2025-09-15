@@ -9,4 +9,5 @@ app = FastAPI()
 async def startup():
     await init_models()
 
+#upload.router is the APIRouter object defined in routers/upload.py
 app.include_router(upload.router, prefix="/upload", tags=["upload"])

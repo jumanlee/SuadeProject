@@ -1,9 +1,8 @@
 from schemas import UploadData, ErrorResponse, Summary
 import csv
 import io
-import time
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from typing import List, Dict, Any, Set
 
@@ -141,7 +140,7 @@ async def upload_data(
         text = io.TextIOWrapper(file.file, encoding="utf-8", newline="")
         reader = csv.DictReader(text)
     except Exception as error:
-        raise HTTPException(status_code=400, detail="Unable to read CSV. {error}")
+        raise HTTPException(status_code=400, detail=f"Unable to read CSV. {error}")
 
 
     #check the header

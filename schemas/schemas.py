@@ -1,10 +1,9 @@
 from datetime import datetime
 from decimal import Decimal
 from typing import Optional
-from uuid import UUID
 from pydantic import BaseModel, Field, ConfigDict
 
-#like serailizers in Django
+#like serailizers in Django but these are for reponse values only
 
 class UploadData(BaseModel):
 #Dict mode: data["id"] or data["name"]
@@ -14,11 +13,11 @@ class UploadData(BaseModel):
 
 #add extra="forbid" to reject any unexpected fields during validation
     model_config = ConfigDict(from_attributes=True, extra="forbid")
-    row_count: int
-    user_count: int
-    product_count: int
-    transaction_count: int
-    duplicates_ignored: int
+    row_count: int = Field(ge=0) #no -ve values!
+    user_count: int = Field(ge=0)
+    product_count: int = Field(ge=0)
+    transaction_count: int = Field(ge=0)
+    duplicates_ignored: int = Field(ge=0)
 
 
 class Summary(BaseModel):
