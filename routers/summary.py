@@ -33,16 +33,22 @@ def parse_datetime(date_raw: str | datetime | date | None) -> Optional[datetime]
                 return datetime.combine(date.fromisoformat(date_raw), time.min)
             return datetime.fromisoformat(date_raw)
         except ValueError:
-            raise HTTPException(status_code=422, detail=f"Invalid datetime format: {date_raw}, must be in e.g. '2023-10-05' or '2023-10-05 00:00:00'")
+            raise HTTPException(status_code=422, detail=f"Invalid datetime format: {date_raw}, Invalid datetime input. Example formats: '2023-10-05' (date only),'2023-10-05T00:00:00' (date and time), a space instead of 'T' is also accepted. End date is exclusive")
 
-    raise HTTPException(status_code=422, detail="Invalid datetime input: must be in e.g. '2023-10-05' or '2023-10-05 00:00:00'")
+    raise HTTPException(status_code=422, detail="Invalid datetime input. Example formats: '2023-10-05' (date only),'2023-10-05T00:00:00' (date and time), a space instead of 'T' is also accepted. End date is exclusive")
 
 #added response_model_exclude_none=True so null fields are not ommited
 @router.get("/{user_id}", response_model=Summary, response_model_exclude_none=True)
 async def get_summary(
     user_id: int,
-    start: Optional[str] = Query(None, description="format in e.g. 2023-10-05 00:00:00"),
-    end: Optional[str]   = Query(None, description="format in e.g. 2023-10-05 00:00:00"),
+    start: Optional[str] = Query(None, description=(
+    "ISO date or datetime. Examples: '2023-10-05' (date only),"
+    "'2023-10-05T00:00:00' (date and time). "
+    "A space instead of 'T' is also accepted.")),
+    end: Optional[str]   = Query(None, description=(
+    "ISO date or datetime. Examples: '2023-10-05' (date only),"
+    "'2023-10-05T00:00:00' (date and time)."
+    "A space instead of 'T' is also accepted. End is exclusive.")),
     session: AsyncSession = Depends(get_session),
 ):
 
