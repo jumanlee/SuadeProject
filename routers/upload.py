@@ -22,7 +22,7 @@ router = APIRouter()
 headers = ["transaction_id", "user_id", "product_id", "timestamp", "transaction_amount"]
 
 #number of rows to insert in one batch, for faster performance, for each insert operation
-batch_size = 10000 
+batch_size = 2000
 
 #parsed from csv.DictReader, which gives Dict[str, str]
 def transform_row(row:Dict[str, str]):
@@ -82,11 +82,11 @@ async def upsert_users(session: AsyncSession, user_ids: Set[int]) -> int:
         #.on_conflict_do_nothing for if a row with the same id already exists, just skip it. Don’t throw an error.
         insert(User)
         .values([{"id": user_id} for user_id in user_ids])
-        .on_conflict_do_nothing(index_elements=["id"])
+        .on_conflict_do_nothing(index_elements=[User.id])
     )
 
-    await session.execute(sql)
-    return len(user_ids)
+    result = await session.execute(sql)
+    return result.rowcount or 0
 
 #upsert products
 async def upsert_products(session: AsyncSession, product_ids: Set[int]) -> int:
@@ -95,11 +95,11 @@ async def upsert_products(session: AsyncSession, product_ids: Set[int]) -> int:
     sql = (
         insert(Product)
         .values([{"id": product_id} for product_id in product_ids])
-        .on_conflict_do_nothing(index_elements=["id"])
+        .on_conflict_do_nothing(index_elements=[Product.id])
     )
 
-    await session.execute(sql)
-    return len(product_ids)
+    result = await session.execute(sql)
+    return result.rowcount or 0
 
     
 async def insert_transactions(session: AsyncSession, rows: List[Dict[str, Any]]) -> tuple[int, int]:
@@ -108,13 +108,14 @@ async def insert_transactions(session: AsyncSession, rows: List[Dict[str, Any]])
     sql = (
         insert(Transaction)
         .values(rows)
-        .on_conflict_do_nothing(index_elements=["transaction_id"])
-        .returning(Transaction.id)
+        .on_conflict_do_nothing(index_elements=[Transaction.transaction_id])
+
+        #better not use the following .returning, as it may return large number of rows, causing performance issues
+        # .returning(Transaction.id) 
     )
 
     result = await session.execute(sql)
-    inserted_ids = result.scalars().all()
-    inserted_count = len(inserted_ids)
+    inserted_count = result.rowcount or 0
     duplicates_ignored = len(rows) - inserted_count
     return (inserted_count, duplicates_ignored)
 
