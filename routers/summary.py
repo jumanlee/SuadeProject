@@ -37,8 +37,6 @@ def parse_datetime(date_raw: str | datetime | date | None) -> Optional[datetime]
 
     raise HTTPException(status_code=422, detail="Invalid datetime input: must be in e.g. '2023-10-05' or '2023-10-05 00:00:00'")
 
-
-
 #added response_model_exclude_none=True so null fields are not ommited
 @router.get("/{user_id}", response_model=Summary, response_model_exclude_none=True)
 async def get_summary(
