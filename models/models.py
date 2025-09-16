@@ -7,6 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy import Integer, Numeric, DateTime, ForeignKey, Index
 import uuid
 
+#Base is for database schema + ORM
 class User(Base):
     __tablename__ = "users"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False, index=True)
@@ -34,7 +35,8 @@ class Transaction(Base):
         PG_UUID(as_uuid=True),
         default=uuid.uuid4,
         unique=True,
-        index=True,
+        #unique already creates index, no need for separate index
+        # index=True,
         nullable=False,
     )
 

@@ -23,8 +23,8 @@ class UploadData(BaseModel):
 class Summary(BaseModel):
     model_config = ConfigDict(from_attributes=True, extra="forbid")
     user_id: int
-    start: Optional[datetime] = None
-    end: Optional[datetime] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
     transaction_count: int
     mean: Optional[Decimal] = None
     maximum: Optional[Decimal] = None

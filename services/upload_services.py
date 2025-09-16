@@ -4,6 +4,8 @@ from decimal import Decimal, InvalidOperation
 from typing import List, Dict, Any, Set
 from fastapi import HTTPException               
 from sqlalchemy.ext.asyncio import AsyncSession
+
+#using insert here rather than sqlalchemy.sql.insert because want to use On Conflict Do Nothing, which is a PostgreSql-specific feature
 from sqlalchemy.dialects.postgresql import insert
 from models.models import User, Product, Transaction
 
@@ -92,9 +94,6 @@ async def insert_transactions(session: AsyncSession, rows: List[Dict[str, Any]])
         insert(Transaction)
         .values(rows)
         .on_conflict_do_nothing(index_elements=[Transaction.transaction_id])
-
-        #better not use the following .returning, as it may return large number of rows, causing performance issues
-        # .returning(Transaction.id) 
     )
 
     result = await session.execute(sql)

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from database import init_models
-from routers import upload
+from routers import upload, summary
 
 app = FastAPI()
 
@@ -11,3 +11,5 @@ async def startup():
 
 #upload.router is the APIRouter object defined in routers/upload.py
 app.include_router(upload.router, prefix="/upload", tags=["upload"])
+
+app.include_router(summary.router, prefix="/summary", tags=["summary"])
