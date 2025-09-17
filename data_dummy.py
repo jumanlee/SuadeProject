@@ -3,12 +3,14 @@ import random
 from pathlib import Path
 from faker import Faker
 TRANSACTIONS = 1_000_000
+# TRANSACTIONS = 10
 HEADERS = ["transaction_id", "user_id", "product_id", "timestamp",
 "transaction_amount"]
 # Initialize Faker
 fake = Faker()
 # Open the CSV file for writing
 with Path("dummy_transactions.csv").open(mode="w", newline="") as file:
+# with Path("test_data.csv").open(mode="w", newline="") as file:
     writer = csv.DictWriter(file, fieldnames=HEADERS)
     writer.writeheader()
     # Generate dummy data
