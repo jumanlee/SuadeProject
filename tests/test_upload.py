@@ -68,18 +68,17 @@ async def test_upload_row_error_invalid_uuid(client):
 async def test_upload_duplicates_ignored_on_second_upload(client):
     csv_path = Path(__file__).resolve().parents[1] / "data" / "duplicate_data.csv"
     payload = csv_path.read_bytes()
-    resp = await client.post("/upload/", files={"file": (csv_path.name, payload, "text/csv")})
 
     #first upload: 2 actual inserts, 1 duplicate ignored
-    resp1 = await client.post("/upload/", files={"file": ("dups.csv", payload, "text/csv")})
+    resp1 = await client.post("/upload/", files={"file": (csv_path.name, payload, "text/csv")})
     assert resp1.status_code == 200, resp1.text
     d1 = resp1.json()
     assert d1["transaction_count"] == 2
     assert d1["duplicates_ignored"] == 1
 
     #second upload of identical file: all 3 are duplicates now, so 0 inserts, 3 duplicates ignored
-    resp2 = await client.post("/upload/", files={"file": ("dups.csv", payload, "text/csv")})
-    assert resp2.status_code == 200
+    resp2 = await client.post("/upload/", files={"file": (csv_path.name, payload, "text/csv")})
+    assert resp2.status_code == 200, resp2.text
     d2 = resp2.json()
     assert d2["transaction_count"] == 0
     assert d2["duplicates_ignored"] == 3
