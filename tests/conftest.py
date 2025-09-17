@@ -13,7 +13,7 @@ os.environ.setdefault("DATABASE_URL", "postgresql+asyncpg://app:app@localhost:54
 #autouse means run this fixture automatically even if the test doesn’t request it, scope="session" means run once per test session
 @pytest.fixture(autouse=True, scope="session")
 async def ensure_tables_created():
-    #Fastapi's startup hook (triggered by httpx.AsyncClient with lifespan="on") will create tables later
+    #Fastapi's startup hook (triggered by httpx.AsyncClient with lifespan="on") will create tables later, not here.
     async with engine.begin() as conn:
         #only to ensure engine is live, if not, would raise error, and test would stop. This is important to ensure the DB is up before running tests
         #this creates a trivial conn.run_sync(lambda conn: None), the actual table creation happens later when the Fastapi app starts up in the test client
