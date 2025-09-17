@@ -1,0 +1,4 @@
+transaction_id,user_id,product_id,timestamp,transaction_amount
+NOT-A-UUID,670,137,2025-07-01 03:44:36.960871,215.05
+0d472245-e037-43b3-a591-e2817fe6180a,617,473,2025-03-20 01:10:32.337956,42.86
+
