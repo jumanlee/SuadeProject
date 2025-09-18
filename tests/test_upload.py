@@ -57,7 +57,7 @@ async def test_upload_invalid_header(client):
 @pytest.mark.asyncio
 async def test_upload_row_error_invalid_uuid(client):
 
-    csv_path = Path(__file__).resolve().parents[1] / "data" / "bad_data.csv"
+    csv_path = Path(__file__).resolve().parents[1] / "data" / "bad_uuid_data.csv"
     payload = csv_path.read_bytes()
     resp = await client.post("/upload/", files={"file": (csv_path.name, payload, "text/csv")})
     assert resp.status_code == 400
