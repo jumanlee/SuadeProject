@@ -14,7 +14,7 @@ docker compose exec app python3 data_dummy.py
 ```
 You'll then have dummy_transactions.csv in the root directory. Note that Bind mount is already activated in Docker Compose, so you should be able to see this in the project root directory.
 
-## As setup by Docker Compose, the PostgreSQL database can be viewed with admine and accessed here:
+## As setup by Docker Compose, the PostgreSQL database can be viewed with Adminer and accessed here:
 ```bash
 http://localhost:8080/
 ```
