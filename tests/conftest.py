@@ -14,11 +14,6 @@ from httpx import AsyncClient, ASGITransport
 from sqlalchemy import text
 import pytest_asyncio
 from asgi_lifespan import LifespanManager
-
-# #IMPORTANT: set env BEFORE importing engine so engine picks it up
-# #ensure that tests hit the mapped Postgres on localhost:5432
-# os.environ.setdefault("DATABASE_URL", "postgresql+asyncpg://app:app@localhost:5432/suade")
-
 from database import engine, Base
 import models.models
 from main import app
@@ -26,11 +21,8 @@ from main import app
 #autouse means run this fixture automatically even if the test doesn’t request it, scope="session" means run once per test session
 @pytest_asyncio.fixture(autouse=True, scope="session")
 async def ensure_tables_created():
-    #Fastapi's startup hook (triggered by httpx.AsyncClient with lifespan="on") will create tables later, not here.
+    #guarantees tables exist before any tests run
     async with engine.begin() as conn:
-        #only to ensure engine is live, if not, would raise error, and test would stop. This is important to ensure the DB is up before running tests
-        #this creates a trivial conn.run_sync(lambda conn: None), the actual table creation happens later when the Fastapi app starts up in the test client
-        # await conn.run_sync(lambda conn: None)  
         await conn.run_sync(Base.metadata.create_all)
     yield
 
@@ -43,6 +35,7 @@ async def client():
     # transport = ASGITransport(app=app, lifespan="on")
 
     async with LifespanManager(app):
+        #note lifespan argument in httpx ≥0.28 has been removed, so need to use asgi_lifespan package instead
         transport = ASGITransport(app=app)
         #fake client
         async with AsyncClient(transport=transport, base_url="http://test") as ac:

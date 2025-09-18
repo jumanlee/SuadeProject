@@ -30,9 +30,9 @@ services:
     ports:
       - "8000:8000"
 
-    #bind mount, uncomment the next two lines for live edit dev:
-    volumes:
-      - .:/app
+    # #bind mount, uncomment the next two lines for live edit dev:
+    # volumes:
+    #   - .:/app
 
   adminer:
     image: adminer
@@ -42,8 +42,6 @@ services:
     #db is service name, not database name e.g. suade
       db:
         condition: service_healthy
-
-
 
 volumes:
   db-data:

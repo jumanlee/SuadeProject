@@ -44,7 +44,6 @@ async def test_summary_no_data(client):
     assert req.status_code == 404
     assert "No data for given filters" in req.text
 
-
 #test date range logic
 @pytest.mark.asyncio
 async def test_summary_end_less_start(client):
