@@ -3,6 +3,8 @@ import uuid
 import csv
 from decimal import Decimal
 import pytest
+from pathlib import Path
+
 
 
 @pytest.mark.asyncio
@@ -20,16 +22,17 @@ async def test_summary(client):
     assert req.status_code == 200, req.text
     data = req.json()
     assert data["user_id"] == 1
-    assert data["transaction_count"] == 2
+    assert data["transaction_count"] == 3
     #JSON may serialize Decimal as string, normalise via Decimal
     assert Decimal(str(data["minimum"])) == Decimal("45.97")
     assert Decimal(str(data["maximum"])) == Decimal("215.05")
     assert Decimal(str(data["mean"])) == Decimal("147.29")
 
+    #now test with date range
     req2 = await client.get("/summary/1", params={"start": "2025-02-21", "end": "2025-07-02"})
     assert req2.status_code == 200, req2.text
     data2 = req2.json()
-    assert data2["transaction_count"] == 3
+    assert data2["transaction_count"] == 2
     assert Decimal(str(data2["minimum"])) == Decimal("180.84")
     assert Decimal(str(data2["maximum"])) == Decimal("215.05")
     assert Decimal(str(data2["mean"])) == Decimal("197.95")
@@ -54,9 +57,9 @@ async def test_summary_end_less_start(client):
     #if end date is before start date should return 422
     req = await client.get("/summary/1", params={"start": "2025-01-03", "end": "2025-01-02"})
     assert req.status_code == 422
-    assert "end must be greater than start" in req.text
+    assert "`end` must be greater than `start`" in req.text
 
     #wrong input date format
-    req = await client.get("/summary/1", params={"start": "2025-01-01"})
+    req = await client.get("/summary/1", params={"start": "202501-01"})
     assert req.status_code == 422
-    assert "end must be greater than start" in req.text
+    assert "Invalid datetime format:" in req.text

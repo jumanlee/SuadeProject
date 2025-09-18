@@ -33,7 +33,7 @@ engine = create_async_engine(
     #test the connection before giving it out of the pool
     pool_pre_ping=True  
 )
-
+#SQLAlchemy’s declarative base class
 class Base(DeclarativeBase):
     pass
 

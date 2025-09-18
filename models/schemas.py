@@ -1,7 +1,8 @@
 from datetime import datetime
 from decimal import Decimal
 from typing import Optional
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_serializer
+from decimal import Decimal, ROUND_HALF_UP
 
 #like serailizers in Django but these are for reponse values only
 
@@ -29,8 +30,12 @@ class Summary(BaseModel):
     mean: Optional[Decimal] = None
     maximum: Optional[Decimal] = None
     minimum: Optional[Decimal] = None
-    
-    
 
+    @field_serializer("minimum", "maximum", "mean")
+    def serialize_decimal(self, value: Optional[Decimal]) -> Optional[str]:
+        if value is None:
+            return None
+        return format(value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP), ".2f")
+    
 class ErrorResponse(BaseModel):
     detail: str
